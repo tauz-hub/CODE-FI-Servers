@@ -3,8 +3,8 @@ const database = new db.table('database');
 
 export async function immediateEntry(idGuildEntry, stream, broadcastLocal, client) {
     console.log(idGuildEntry)
-    let listGuilds = database.get('idGuilds'),
-        listChannels = database.get('idChannels');
+    let listGuilds = database.get('idGuild'),
+        listChannels = database.get('idChannel');
 
     for (let i = 0; i < listGuilds.length; i++) {
         try {

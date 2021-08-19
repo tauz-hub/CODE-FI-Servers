@@ -2,7 +2,7 @@ import db from 'quick.db'
 
 export function setGuildsAndChannelsDatabase(setGuild, setChannel) {
     const database = new db.table('database'),
-        getGuilds = database.get('idGuilds');
+        getGuilds = database.get('idGuild');
 
     for (let j = 0; j < getGuilds.length; j++) {
 
@@ -11,7 +11,7 @@ export function setGuildsAndChannelsDatabase(setGuild, setChannel) {
             return true;
         }
     }
-    database.push('idGuilds', setGuild)
-    database.push('idChannels', setChannel)
+    database.push('idGuild', setGuild)
+    database.push('idChannel', setChannel)
     return false;
 }

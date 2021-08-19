@@ -47,12 +47,8 @@ client.on('ready', async() => {
     await playInAllChannels(stream, broadcast, client)
 
 });
+
 /*
-setInterval(async function() {
-    await playInAllChannels(stream, broadcast, client);
-}, 60000)
-
-
 client.on('raw', async dados => {
     if (!dados.d) return
     if (!dados.d.user_id) return;

@@ -9,7 +9,7 @@
         "discord.js": "^12.5.3",
         "discord.js-arbitrary-ffmpeg": "^1.1.0",
         "dotenv": "^10.0.0",
-        "ffmpeg": "^0.0.4",
+        "ffmpeg": "0.0.4",
         "ffmpeg-static": "^4.4.0",
         "lowdb": "^2.1.0",
         "opusscript": "^0.0.8",

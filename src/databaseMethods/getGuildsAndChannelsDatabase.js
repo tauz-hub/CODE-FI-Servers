@@ -5,8 +5,8 @@ export function getGuildsAndChannelsDatabase() {
     let getChannels = [],
         getGuilds = [];
 
-    let receiveIdGuildDatabase = database.get('idGuilds'),
-        receiveIdChannelDatabase = database.get('idChannels');
+    let receiveIdGuildDatabase = database.get('idGuild'),
+        receiveIdChannelDatabase = database.get('idChannel');
 
 
     if (receiveIdGuildDatabase) {
