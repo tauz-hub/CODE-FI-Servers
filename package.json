@@ -1,0 +1,21 @@
+{
+    "scripts": {
+        "start": "node .",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "type": "module",
+    "dependencies": {
+        "@discordjs/voice": "github:discordjs/voice",
+        "discord.js": "^12.5.3",
+        "discord.js-arbitrary-ffmpeg": "^1.1.0",
+        "dotenv": "^10.0.0",
+        "ffmpeg": "^0.0.4",
+        "ffmpeg-static": "^4.4.0",
+        "lowdb": "^2.1.0",
+        "opusscript": "^0.0.8",
+        "quick": "^0.0.6",
+        "quick.db": "^7.1.3",
+        "ytdl": "^1.4.1",
+        "ytdl-core": "^4.9.1"
+    }
+}
