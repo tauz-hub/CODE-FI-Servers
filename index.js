@@ -73,7 +73,7 @@ process.setMaxListeners(0)
     //lient.on('debug', console.log);
 
 client.on("message", async message => {
-    console.log(message.author)
+    
     if (message.author.bot) return;
     if (!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).trim();
@@ -94,6 +94,7 @@ client.on("message", async message => {
         }
     }
     if (command === 'add') {
+        console.log(message)
         if (!idchannellocal || !Number(idchannellocal)) {
             message.channel.send("o id não é de um canal de voz, por favor verifique e adicione com *>add id**\nPor exemplo: >add 12345678901234567 ")
         } else {
@@ -112,7 +113,7 @@ client.on("message", async message => {
     }
 
     if (command === 'remove') {
-
+     console.log(message)
         try {
             idguild = message.guild.id;
             let getGuilds = database.get('idGuilds'),
