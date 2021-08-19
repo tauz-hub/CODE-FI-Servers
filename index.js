@@ -47,7 +47,7 @@ client.on('ready', async() => {
     await playInAllChannels(stream, broadcast, client)
 
 });
-
+/*
 setInterval(async function() {
     await playInAllChannels(stream, broadcast, client);
 }, 60000)
@@ -65,7 +65,7 @@ client.on('raw', async dados => {
         return
 
     }
-});
+});*/
 process.on("unhandledRejection", (reason, promise) => {
     try {
         console.error("Unhandled Rejection at: ", promise, "reason: ", reason.stack || reason);
