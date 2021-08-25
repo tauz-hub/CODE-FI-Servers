@@ -46,7 +46,7 @@ client.on('ready', async() => {
 
 
             try {
-                playInAllChannels(client)
+                process.exit()
             } catch (e) { console.log("errooo grave na reconexão") }
         }, 30000)
     }
