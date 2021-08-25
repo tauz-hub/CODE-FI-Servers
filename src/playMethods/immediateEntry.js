@@ -1,23 +1,25 @@
 import db from 'quick.db'
 const database = new db.table('database');
+import 'dotenv/config'
+const { url } = process.env
+import ytdl from 'ytdl-core'
 
-export async function immediateEntry(idGuildEntry, stream, broadcastLocal, client) {
-    console.log(idGuildEntry)
-    let listGuilds = database.get('idGuild'),
-        listChannels = database.get('idChannel');
 
-    for (let i = 0; i < listGuilds.length; i++) {
-        try {
-            if (idGuildEntry === listGuilds[i]) {
-                broadcastLocal = client.voice.createBroadcast();
-                broadcastLocal.play(stream)
-                const channelReconect = client.channels.cache.get(listChannels[i]) || await client.channels.fetch(listChannels[i]);
-                await channelReconect.join();
-                let connection = await channelReconect.join();
-                connection.play(stream);
-            }
-        } catch (e) {
-            console.log("erro ao conectar : " + e)
-        }
+let broadcast = null,
+    stream = ytdl(url)
+
+export async function immediateEntry(idChannel, client) {
+
+    try {
+
+        broadcast = client.voice.createBroadcast();
+        broadcast.play(stream)
+        const channelReconect = client.channels.cache.get(idChannel) || await client.channels.fetch(idChannel);
+        await channelReconect.join();
+        let connection = await channelReconect.join();
+        connection.play(stream);
+
+    } catch (e) {
+        console.log("erro ao conectar : " + e)
     }
 }

@@ -6,7 +6,6 @@ import Discord from "discord.js"
 import ytdl from "ytdl-core"
 import db from 'quick.db'
 import { playInAllChannels } from './src/playMethods/playInAllChannels.js'
-import { setGuildsAndChannelsDatabase } from './src/databaseMethods/setGuildsAndChannelsDatabase.js'
 import { immediateEntry } from './src/playMethods/immediateEntry.js'
 
 const database = new db.table('database');
@@ -15,9 +14,8 @@ const client = new Discord.Client({
     partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USERS', 'GUILD_MEMBER']
 
 });
-let broadcast = null,
-    stream = ytdl(url, { highWaterMark: 100 << 150 }),
-    pausaReload = false;
+let interval = null;
+
 
 if (!token) {
     console.error("token invalido");
@@ -25,6 +23,7 @@ if (!token) {
 if (!ytdl.validateURL(url)) {
     console.log("link do vídeo inválido.");
 }
+
 
 client.on('ready', async() => {
 
@@ -43,11 +42,42 @@ client.on('ready', async() => {
     status.length]}`, {
         type: 'WATCHING'
     }), 5000);
+    playInAllChannels(client)
+    console.log("BOT ON")
 
-    await playInAllChannels(stream, broadcast, client)
+    if (!interval) {
+        interval = setInterval(async function() {
+
+
+
+            try {
+                playInAllChannels(client)
+            } catch (e) { console.log("errooo grave na reconexão") }
+        }, 30000)
+    }
 
 });
 
+/*
+setInterval(async function() {
+    if (!client.voice.connections.size) {
+        console.log("desconectado")
+        if (!channel) return;
+        try {
+            stream = ytdl(url)
+            broadcast = client.voice.createBroadcast();
+            stream.on('error', console.error);
+            broadcast.play(stream);
+
+            const connection = await channel.join();
+            connection.play(broadcast);
+            console.log("broadcast conectado pois foi forçado a parar")
+        } catch (error) {
+            console.error(error);
+            channel.leave()
+        }
+    }
+}, 500);*/
 /*
 client.on('raw', async dados => {
     if (!dados.d) return
@@ -55,11 +85,8 @@ client.on('raw', async dados => {
     if (dados.d.user_id !== '870349656595517521') return;
     if (dados.t !== 'VOICE_STATE_UPDATE') return;
     if (dados.d.channel_id === null) {
-
-        await immediateEntry(dados.d.guild_id, stream, broadcast, client)
-
+        immediateEntry(dados.d.guild_id, client)
         return
-
     }
 });*/
 process.on("unhandledRejection", (reason, promise) => {
@@ -70,17 +97,16 @@ process.on("unhandledRejection", (reason, promise) => {
     }
 });
 process.setMaxListeners(0)
-    //lient.on('debug', console.log);
+
 
 client.on("message", async message => {
-    
+
     if (message.author.bot) return;
     if (!message.content.startsWith(prefix)) return;
-    const args = message.content.slice(prefix.length).trim();
-    const commandWithPhrase = args.toLowerCase();
-    const [command, idchannellocal] = commandWithPhrase.split(' ');
+    const args = message.content.slice(prefix.length).split(/ +/);
+    const command = args.shift().toLowerCase();
 
-    let idguild;
+
     if (message.author.id === '454059471765766156' || message.author.id === '760275647016206347') {
         if (command === "backup") {
 
@@ -93,40 +119,37 @@ client.on("message", async message => {
 
         }
     }
+
     if (command === 'add') {
-        console.log(message)
-        if (!idchannellocal || !Number(idchannellocal)) {
-            message.channel.send("o id não é de um canal de voz, por favor verifique e adicione com *>add id**\nPor exemplo: >add 12345678901234567 ")
+
+        args[0] = args[0].replace('<#', '')
+        args[0] = args[0].replace('>', '')
+
+        console.log(args[0])
+        let channel = client.channels.cache.get(args[0]) || await client.channels.fetch(args[0]);
+        if (!channel) {
+            message.channel.send("canal não existe");
+            return
+        } else if (channel.type !== "voice") {
+            message.channel.send("id não é de um canal de voz");
+            return
         } else {
-            let channel = client.channels.cache.get(idchannellocal) || await client.channels.fetch(idchannellocal);
-            if (!channel) {
-                message.channel.send("canal não existe");
 
-            } else if (channel.type !== "voice") {
-                message.channel.send("id não é de um canal de voz");
-
-            } else {
-                setGuildsAndChannelsDatabase(message.guild.id, idchannellocal)
-                immediateEntry(message.guild.id, stream, broadcast, client)
-            }
+            immediateEntry(args[0], client)
+            database.set(message.guild.id, args[0])
         }
     }
 
     if (command === 'remove') {
-     console.log(message)
-        try {
-            idguild = message.guild.id;
-            let getGuilds = database.get('idGuilds'),
-                getChannels = database.get('idChannels')
-            for (let i = 0; i < getChannels.length; i++) {
 
-                if (getGuilds[i] === idguild) {
-                    let idchannel = client.channels.cache.get(getChannels[i]) || await client.channels.fetch(getChannels[i]);
-                    idchannel.leave()
-                    database.delete(`idGuilds.${i}`)
-                    database.delete(`idChannels.${i}`)
-                }
-            }
+        try {
+
+            let getChannel = database.get(`${message.guild.id}`)
+
+            let channel = client.channels.cache.get(getChannel.channel) || await client.channels.fetch(getChannel.channel);
+            channel.leave()
+            database.delete(`${message.guild.id}`)
+
         } catch (error) {
             message.channel.send("Mande esse comando no chat do seu servidor")
         }
