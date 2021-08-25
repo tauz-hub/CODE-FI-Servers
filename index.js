@@ -1,7 +1,7 @@
 import 'dotenv/config'
 const { url, prefix, token } = process.env
-    //if (token !== 'production')
-    ////   dotenv.config();
+    if (token !== 'production')
+      dotenv.config();
 import Discord from "discord.js"
 import ytdl from "ytdl-core"
 import db from 'quick.db'
@@ -28,12 +28,8 @@ if (!ytdl.validateURL(url)) {
 client.on('ready', async() => {
 
     let status = [
-        `❤️Rafaella Ballerini on Youtube!❤️`,
-        `💜Rafaella Ballerini on Twitch!💜`,
-        `🧡Rafaella Ballerini on Instagram!🧡`,
-        `🎧Coding with Lo-fi!🎧`,
-        `⭐Stream Lo-fi!⭐`,
-        `👨‍💻Contact TAUZ#0001 for questions about me😺`
+       
+        `🛠🔨In maintenance by tauzTAUZ#0001🛠🔨`
 
     ];
     let i = 0;
