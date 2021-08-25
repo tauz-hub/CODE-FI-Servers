@@ -1,7 +1,6 @@
 import 'dotenv/config'
 const { url, prefix, token } = process.env
-    if (token !== 'production')
-      dotenv.config();
+
 import Discord from "discord.js"
 import ytdl from "ytdl-core"
 import db from 'quick.db'
