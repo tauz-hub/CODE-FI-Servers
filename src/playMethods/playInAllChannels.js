@@ -6,7 +6,7 @@ const { url } = process.env
 import ytdl from 'ytdl-core'
 
 let broadcast = null,
-    stream = null;
+    stream = ytdl(url);
 
 export async function playInAllChannels(client) {
     //process.setMaxListeners(0);
@@ -19,7 +19,7 @@ export async function playInAllChannels(client) {
 
         console.log(objChannel)
         try {
-            const channel = client.channels.cache.get(objChannel) || await client.channels.fetch(objChannel);
+            const channel = await client.channels.fetch(objChannel);
             if (channel) {
                 console.log(objChannel)
                 channelsAddSucess.push(channel)
@@ -33,10 +33,8 @@ export async function playInAllChannels(client) {
         const channel = channelsAddSucess[i]
         try {
             channel.leave()
-            stream = ytdl(url)
             broadcast = client.voice.createBroadcast();
-            stream.on('error', console.error);
-            broadcast.play(stream);
+            broadcast.play(stream)
 
 
             const connection = await channel.join();
@@ -48,7 +46,7 @@ export async function playInAllChannels(client) {
             channel.leave()
 
             console.log(`Não foi possivel conectar ao servidor : ${channel.guild.name}\n No canal : ${channel.name}\nid: ${getDatabase[i].data}\n-------------------------\n`)
-            console.log(`Tentando reconectar => ${channel.guild.name}`)
+            console.log(`Tentando reconectar => ${channel.guild.name}` + e)
         }
     }
 }

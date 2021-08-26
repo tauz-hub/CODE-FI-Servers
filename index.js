@@ -1,6 +1,7 @@
 import 'dotenv/config'
 const { url, prefix, token } = process.env
-
+    //if (token !== 'production')
+    ////   dotenv.config();
 import Discord from "discord.js"
 import ytdl from "ytdl-core"
 import db from 'quick.db'
@@ -27,8 +28,12 @@ if (!ytdl.validateURL(url)) {
 client.on('ready', async() => {
 
     let status = [
-       
-        `🛠🔨In maintenance by tauzTAUZ#0001🛠🔨`
+        `❤️Rafaella Ballerini on Youtube!❤️`,
+        `💜Rafaella Ballerini on Twitch!💜`,
+        `🧡Rafaella Ballerini on Instagram!🧡`,
+        `🎧Coding with Lo-fi!🎧`,
+        `⭐Stream Lo-fi!⭐`,
+        `👨‍💻Contact TAUZ#0001 for questions about me😺`
 
     ];
     let i = 0;
@@ -42,13 +47,17 @@ client.on('ready', async() => {
 
     if (!interval) {
         interval = setInterval(async function() {
-
-
-
             try {
-                process.exit()
+                const database = new db.table('database')
+                let getChannels = database.all()
+
+                for (let i = 0; i < getChannels.length; i++) {
+                    const channel = client.channels.cache.get(getChannels[i].data) || await client.channels.fetch(getChannels[i].data);
+                    channel.leave()
+                }
+                playInAllChannels(client)
             } catch (e) { console.log("errooo grave na reconexão") }
-        }, 30000)
+        }, 120000)
     }
 
 });
@@ -59,31 +68,26 @@ setInterval(async function() {
         console.log("desconectado")
         if (!channel) return;
         try {
-            stream = ytdl(url)
-            broadcast = client.voice.createBroadcast();
-            stream.on('error', console.error);
-            broadcast.play(stream);
-
-            const connection = await channel.join();
-            connection.play(broadcast);
-            console.log("broadcast conectado pois foi forçado a parar")
+            playInAllChannels(client)
         } catch (error) {
             console.error(error);
             channel.leave()
         }
     }
 }, 500);*/
-/*
+
 client.on('raw', async dados => {
     if (!dados.d) return
     if (!dados.d.user_id) return;
     if (dados.d.user_id !== '870349656595517521') return;
     if (dados.t !== 'VOICE_STATE_UPDATE') return;
+
     if (dados.d.channel_id === null) {
-        immediateEntry(dados.d.guild_id, client)
+        immediateEntry(dados.d.channel_id, client)
         return
     }
-});*/
+});
+
 process.on("unhandledRejection", (reason, promise) => {
     try {
         console.error("Unhandled Rejection at: ", promise, "reason: ", reason.stack || reason);
