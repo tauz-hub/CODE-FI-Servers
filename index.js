@@ -160,6 +160,7 @@ client.on("message", async message => {
             .setTitle(`${message.author.tag} Olá, eu sou a CODEFI do servidor BALLERINI e desde já agradeço ter me adicionado`)
             .setDescription('Para adicionar o bot a um canal digite `>add #!canal` ou `>add <id_Do_Canal>`😉' +
                 '\nO bot foi criado sem fins lucrativos por isso é totalmente público e pode ser encontrado no servidor Ballerini' +
+                '\nPara remover o bot do canal você pode usar >remove e ele sairá 🙅‍♀️' + 
                 '\nCriador inicial e futuras dúvidas: TAUZ#0001 (Moderador e Desenvolvedor no Servidor)')
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
         );
