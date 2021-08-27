@@ -59,23 +59,7 @@ client.on('ready', async() => {
     }
 
 });
-/*
-let tempDelay = 0;
-setInterval(async function() {
-    console.log(tempDelay)
-    if (client.voice.connections.size < tempDelay) {
-        console.log("desconectado")
-        if (!channel) return;
-        try {
-            playInAllChannels(client)
-        } catch (error) {
-            console.error(error);
-            channel.leave()
-        }
-    }
-    tempDelay = client.voice.connections.size
-}, 1500);
-*/
+
 client.on('raw', async dados => {
     if (!dados.d) return
     if (!dados.d.user_id) return;
@@ -83,8 +67,8 @@ client.on('raw', async dados => {
     if (dados.t !== 'VOICE_STATE_UPDATE') return;
 
     if (dados.d.channel_id === null) {
-        immediateEntry(dados.d.channel_id, client)
-        return
+        await immediateEntry(dados.d.channel_id, client)
+        return;
     }
 });
 
@@ -129,7 +113,7 @@ client.on("message", async message => {
                 objChannel = objChannel.replace(/"/g, '')
 
                 try {
-                    const channel = await client.channels.fetch(objChannel);
+                    const channel =  client.channels.cache.get(objChannel) || await client.channels.fetch(objChannel);
                     if (channel) {
                         channelsAddSucess.push(channel)
                     }
