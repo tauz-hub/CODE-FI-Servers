@@ -55,7 +55,7 @@ client.on('ready', async() => {
                 playInAllChannels(client)
             } catch (e) { console.log("errooo grave na reconexão geral") }
             console.log("reconexão geral feita com sucesso!")
-        }, 120000)
+        }, 1200000)
     }
 
 });
