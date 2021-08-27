@@ -17,7 +17,7 @@ export async function playInAllChannels(client) {
         objChannel = objChannel.replace(/"/g, '')
 
         try {
-            const channel = await client.channels.fetch(objChannel);
+            const channel =  client.channels.cache.get(objChannel) || await client.channels.fetch(objChannel);
             if (channel) {
                 channelsAddSucess.push(channel)
             }
