@@ -30,7 +30,7 @@ export async function playInAllChannels(client) {
         const channel = channelsAddSucess[i]
         try {
             channel.leave()
-            broadcast = client.voice.createBroadcast();
+            broadcast = await client.voice.createBroadcast();
             broadcast.play(stream)
 
 
