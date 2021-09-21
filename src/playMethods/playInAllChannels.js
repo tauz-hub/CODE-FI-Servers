@@ -5,7 +5,7 @@ const { url } = process.env
 import ytdl from 'ytdl-core'
 
 let broadcast = null,
-    stream = ytdl(url, { highWaterMark: 1<<25 });
+    stream = ytdl(url);
 
 export async function playInAllChannels(client) {
     process.setMaxListeners(0);
