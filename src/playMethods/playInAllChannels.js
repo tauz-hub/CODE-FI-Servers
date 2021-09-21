@@ -8,7 +8,7 @@ let broadcast = null,
     stream = ytdl(url);
 
 export async function playInAllChannels(client) {
-    //process.setMaxListeners(0);
+    process.setMaxListeners(0);
     const getDatabase = database.all()
     let channelsAddSucess = []
 
@@ -29,7 +29,7 @@ export async function playInAllChannels(client) {
 
         const channel = channelsAddSucess[i]
         try {
-            channel.leave()
+            await channel.leave()
             broadcast = await client.voice.createBroadcast();
             broadcast.play(stream)
 
@@ -40,7 +40,7 @@ export async function playInAllChannels(client) {
             console.log(`Conectado ao servidor : ${channel.guild.name}\n No canal :  ${channel.name}\nid: ${channelsAddSucess[i].id}\n-------------------------\n`)
 
         } catch (e) {
-            channel.leave()
+            await channel.leave()
 
             console.log(`Não foi possivel conectar ao servidor : ${channel.guild.name}\n No canal : ${channel.name}\nid: ${channelsAddSucess[i].id}\n-------------------------\n`)
             console.log(`Tentando reconectar => ${channel.guild.name}` + e)
