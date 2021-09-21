@@ -50,7 +50,7 @@ client.on('ready', async() => {
 
                 for (let i = 0; i < getChannels.length; i++) {
                     const channel = client.channels.cache.get(getChannels[i].data) || await client.channels.fetch(getChannels[i].data);
-                    channel.leave()
+                    await channel.leave()
                 }
                 playInAllChannels(client)
             } catch (e) { console.log("errooo grave na reconexão geral") }
